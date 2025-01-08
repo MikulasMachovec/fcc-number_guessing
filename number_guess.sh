@@ -11,6 +11,7 @@ if [[ -z $USER_ID ]]
   then
   # first timer
     echo "Welcome, $NAME! It looks like this is your first time here."
+    NEW_USER_INSERT=$($PSQL "INSERT INTO users(username, games_played, best_game) VALUES('$NAME',0,0 )" )
   else
   #if user already exist
    #get name
@@ -21,3 +22,4 @@ if [[ -z $USER_ID ]]
    BEST=$($PSQL "SELECT best_game FROM users WHERE user_id=$USER_ID")
   echo "Welcome back, $USERNAME! You have played $PLAYED games, and your best game took $BEST guesses."
 fi
+
