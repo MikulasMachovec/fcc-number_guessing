@@ -24,16 +24,34 @@ if [[ -z $USER_ID ]]
 fi
 
 #After game player update fun
+DATA_UPDATE(){
+NUMBER_OF_TRIES=$1
 
+#comparison of previous best against current run
+if [[ $BEST == 0 ]]
+  then
+    BEST=$NUMBER_OF_TRIES
+  elif [[ $NUMBER_OF_TRIES -lt $BEST ]]
+  then
+  echo "NEW BEST"
+  BEST=$NUMBER_OF_TRIES
+fi
 
+# adding +1 to played games
+((PLAYED++))
+#insert of new values
+DATA_INSERT=$($PSQL "UPDATE users SET games_played=$PLAYED, best_game=$BEST WHERE user_id=$USER_ID")
 
+}
 
 GAME(){
+
 RANDOM_NUMBER=$((1 + RANDOM % 1000))
 GUESSED=false
-echo $RANDOM_NUMBER
 TRIES=0
+
 echo "Guess the secret number between 1 and 1000:"
+
 while [[ $GUESSED == false  ]]
 do 
   read GUESS
@@ -43,7 +61,7 @@ do
     if [[ $GUESS == $RANDOM_NUMBER ]]
     then
       echo "You guessed it in $TRIES tries. The secret number was $RANDOM_NUMBER. Nice job!"
-      
+      DATA_UPDATE $TRIES
       GUESSED=true
     elif [[ $GUESS -lt $RANDOM_NUMBER  ]]
     then
