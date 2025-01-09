@@ -25,7 +25,9 @@ if [[ -z $USER_ID ]]
    games_played=$($PSQL "SELECT games_played FROM users WHERE user_id=$USER_ID" )
    #get best game 
    best_game=$($PSQL "SELECT best_game FROM users WHERE user_id=$USER_ID")
-    echo "Welcome back, $username! You have played $games_played games, and your best game took $best_game guesses."
+
+  echo Welcome back, $username! You have played $games_played games, and your best game took $best_game guesses.
+
 fi
 
 #After game player update fun
@@ -54,6 +56,7 @@ GAME(){
 RANDOM_NUMBER=$((1 + RANDOM % 1000))
 GUESSED=false
 TRIES=0
+
 echo "Guess the secret number between 1 and 1000:"
 
 while [[ $GUESSED == false  ]]
