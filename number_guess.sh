@@ -12,6 +12,11 @@ if [[ -z $USER_ID ]]
   # first timer
     echo "Welcome, $NAME! It looks like this is your first time here."
     NEW_USER_INSERT=$($PSQL "INSERT INTO users(username, games_played, best_game) VALUES('$NAME',0,0 )" )
+    #get new user_id
+    USER_ID=$($PSQL "SELECT user_id FROM users WHERE username='$NAME' " )
+    #set new suer for 0 in best and played
+    games_played=0
+    best_game=0
   else
   #if user already exist
    #get name
