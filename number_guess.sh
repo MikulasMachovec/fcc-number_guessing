@@ -1,6 +1,8 @@
 #!/bin/bash
 PSQL="psql --username=freecodecamp --dbname=num_guessing -t --no-align -c"
 
+USER_LOGIN(){
+
 echo "Enter your username:"
 read NAME
 # find user_id
@@ -22,4 +24,15 @@ if [[ -z $USER_ID ]]
    BEST=$($PSQL "SELECT best_game FROM users WHERE user_id=$USER_ID")
   echo "Welcome back, $USERNAME! You have played $PLAYED games, and your best game took $BEST guesses."
 fi
+}
 
+GAME(){
+echo $((1 + RANDOM % 1000))
+}
+
+MAIN_GAME(){
+  USER_LOGIN
+  GAME
+}
+
+MAIN_GAME
