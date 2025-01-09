@@ -15,12 +15,12 @@ if [[ -z $USER_ID ]]
   else
   #if user already exist
    #get name
-   USERNAME=$($PSQL "SELECT username FROM users WHERE user_id=$USER_ID" )
+   username=$($PSQL "SELECT username FROM users WHERE user_id=$USER_ID" )
    #get played games
-   PLAYED=$($PSQL "SELECT games_played FROM users WHERE user_id=$USER_ID" )
+   games_played=$($PSQL "SELECT games_played FROM users WHERE user_id=$USER_ID" )
    #get best game 
-   BEST=$($PSQL "SELECT best_game FROM users WHERE user_id=$USER_ID")
-  echo "Welcome back, $USERNAME! You have played $PLAYED games, and your best game took $BEST guesses."
+   best_game=$($PSQL "SELECT best_game FROM users WHERE user_id=$USER_ID")
+    echo "Welcome back, $username! You have played $games_played games, and your best game took $best_game guesses."
 fi
 
 #After game player update fun
@@ -28,19 +28,19 @@ DATA_UPDATE(){
 NUMBER_OF_TRIES=$1
 
 #comparison of previous best against current run
-if [[ $BEST == 0 ]]
+if [[ $best_game == 0 ]]
   then
-    BEST=$NUMBER_OF_TRIES
-  elif [[ $NUMBER_OF_TRIES -lt $BEST ]]
+    best_game=$NUMBER_OF_TRIES
+  elif [[ $NUMBER_OF_TRIES -lt $best_game ]]
   then
   echo "NEW BEST"
-  BEST=$NUMBER_OF_TRIES
+  best_game=$NUMBER_OF_TRIES
 fi
 
 # adding +1 to played games
-((PLAYED++))
+((games_played++))
 #insert of new values
-DATA_INSERT=$($PSQL "UPDATE users SET games_played=$PLAYED, best_game=$BEST WHERE user_id=$USER_ID")
+DATA_INSERT=$($PSQL "UPDATE users SET games_played=$games_played, best_game=$best_game WHERE user_id=$USER_ID")
 
 }
 
@@ -49,7 +49,6 @@ GAME(){
 RANDOM_NUMBER=$((1 + RANDOM % 1000))
 GUESSED=false
 TRIES=0
-
 echo "Guess the secret number between 1 and 1000:"
 
 while [[ $GUESSED == false  ]]
